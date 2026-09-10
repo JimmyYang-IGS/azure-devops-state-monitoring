@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         C4143 DV-SIT Test Status Dashboard
+// @name         C9A16 MPScale SIT Test Status Dashboard
 // @namespace    local.ado.dvscale.dashboard
 // @version      1.10.8
 // @description  Adds a multi-project Query selector, real Test Results, XLSX exports, query-scoped snapshots, and Extension support.
