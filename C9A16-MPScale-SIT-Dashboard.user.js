@@ -57,7 +57,7 @@
   var isDashboardEntry = !!extensionContext || location.hash.toLowerCase() === "#dvdash";
   if (!isDashboardEntry) return;
   var D = {};
-  D.CFG = {"org":"https://azurecsi.visualstudio.com","orgName":"azurecsi","project":"Building%20Block","sourceType":"testPlan","planId":3949645,"suiteId":3949646,"queryId":"","queryUrl":"https://azurecsi.visualstudio.com/Building%20Block/_testPlans/define?planId=3949645&suiteId=3949646","testResultDays":28};
+  D.CFG = {"org":"https://azurecsi.visualstudio.com","orgName":"azurecsi","project":"Building%20Block","sourceType":"testPlan","planId":3949645,"suiteId":3949646,"queryId":"","queryUrl":"https://azurecsi.visualstudio.com/Building%20Block/_testPlans/charts?planId=3949645&suiteId=3949646","testResultDays":28};
   if (extensionContext) {
     D.CFG.org = String(extensionContext.org || D.CFG.org).replace(/\/+$/, '');
     D.CFG.orgName = extensionContext.orgName || D.CFG.orgName;
