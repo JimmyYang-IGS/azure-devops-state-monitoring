@@ -254,10 +254,10 @@
     if (D.CFG.sourceType === 'testPlan') {
       var planPath = base + '/' + encodeURIComponent(D.CFG.project) + '/_apis/testplan/Plans/' + encodeURIComponent(D.CFG.planId);
       var suiteTreeResponse = await D.apiFetch(planPath + '/suites?asTreeView=true&api-version=7.1');
-      var configRank = { LM: 1, MM: 2, HH: 3 }, configMap = {};
+      var configRank = { Rack1: 1, Rack2: 2, Rack3: 3,Rack4: 4, Rack5: 5, Rack6: 6, Rack7: 7, Rack8: 8 }, configMap = {};
       function findConfigRoots(suite, insideConfig) {
         if (!suite) return;
-        var match = /\b(LM|MM|HH)\b/i.exec(suite.name || '');
+        var match = /\b(Rack1|Rack2|Rack3|Rack4|Rack5|Rack6|Rack7|Rack8)\b/i.exec(suite.name || '');
         var isConfigRoot = !!match && !insideConfig;
         if (isConfigRoot) {
           var code = match[1].toUpperCase();
@@ -266,9 +266,9 @@
         (suite.children || []).forEach(function (child) { findConfigRoots(child, insideConfig || isConfigRoot); });
       }
       (suiteTreeResponse.value || []).forEach(function (suite) { findConfigRoots(suite, false); });
-      var missingConfigs = ['LM', 'MM', 'HH'].filter(function (code) { return !configMap[code]; });
+      var missingConfigs = ['Rack1', 'Rack2', 'Rack3', 'Rack4', 'Rack5', 'Rack6', 'Rack7', 'Rack8'].filter(function (code) { return !configMap[code]; });
       if (missingConfigs.length) throw new Error('Test Plan suite tree is missing Config suites: ' + missingConfigs.join(', '));
-      var configSuites = ['LM', 'MM', 'HH'].map(function (code) { return configMap[code]; });
+      var configSuites = ['Rack1', 'Rack2', 'Rack3', 'Rack4', 'Rack5', 'Rack6', 'Rack7', 'Rack8'].map(function (code) { return configMap[code]; });
       suiteGroups = {};
       function normalizePointOutcome(value) {
         var key = String(value || 'none').replace(/[\s_-]+/g, '').toLowerCase();
@@ -322,7 +322,7 @@
         var fallbackSuite = { id: D.CFG.suiteId, name: 'Test Suite ' + D.CFG.suiteId };
         (fallbackPoints.value || []).forEach(function (point) { addTestPoint(point, fallbackSuite); });
       }
-      if (!ids.length) throw new Error('The selected LM / MM / HH Config suites contain no readable Test Cases.');
+      if (!ids.length) throw new Error('The selected Rack1 / Rack2 / Rack3 / Rack4 / Rack5 / Rack6 / Rack7 / Rack8 Config suites contain no readable Test Cases.');
     } else {
       var wiql = await D.apiFetch(base + '/' + encodeURIComponent(D.CFG.project) + '/_apis/wit/wiql/' + D.CFG.queryId + '?api-version=6.0&$top=5000');
       rels = wiql.workItemRelations || [];
@@ -419,9 +419,9 @@
     }
     var racks;
     if (suiteGroups) {
-      var configOrder = { LM: 1, MM: 2, HH: 3 };
+      var configOrder = { Rack1: 1, Rack2: 2, Rack3: 3,Rack4: 4, Rack5: 5, Rack6: 6, Rack7: 7, Rack8: 8 };
       racks = Object.keys(suiteGroups).map(function (key) {
-        var group = suiteGroups[key], match = /\b(LM|MM|HH)\b/i.exec(group.name || '');
+        var group = suiteGroups[key], match = /\b(Rack1|Rack2|Rack3|Rack4|Rack5|Rack6|Rack7|Rack8)\b/i.exec(group.name || '');
         var code = match ? match[1].toUpperCase() : '', label = code ? (code + ' Config') : group.name;
         return {
           id: 'suite-' + group.id, suiteId: group.id, type: 'Feature', title: group.name, state: '?', tags: '', changed: null, assigned: '',
