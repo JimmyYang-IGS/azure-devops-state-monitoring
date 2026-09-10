@@ -275,7 +275,7 @@
         .filter(function (code) { return !!configMap[code]; })
         .map(function (code) { return configMap[code]; });
 
-      只有在連「任何一個 Rack」都找不到時才報錯
+      //只有在連「任何一個 Rack」都找不到時才報錯
        if (configSuites.length === 0) {
        throw new Error('Test Plan suite tree is missing Rack suites (Expected Rack1 to Rack8).'); 
        }
