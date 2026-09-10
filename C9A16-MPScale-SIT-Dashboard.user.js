@@ -96,8 +96,8 @@
     return (D.S.queries || []).filter(function (query) { return D.queryKey(query) === key; })[0] || Object.assign({ name: 'Azure DevOps Query' }, D.CFG);
   };
   D.isTestPlanSource = function () { return D.CFG.sourceType === 'testPlan'; };
-  D.groupSingular = function () { return D.isTestPlanSource() ? 'Rack' : 'Rack'; };
-  D.groupPlural = function () { return D.isTestPlanSource() ? 'Racks' : 'Racks'; };
+  D.groupSingular = function () { return 'Rack'; };
+  D.groupPlural = function () { return 'Racks'; };
   D.primaryGroupName = function () { return (D.S.racks[0] && D.S.racks[0].label) || D.groupSingular(); };
   D.parseQueryUrl = function (value, name) {
     var parsed;
