@@ -423,7 +423,7 @@
       var configOrder = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8 };
       racks = Object.keys(suiteGroups).map(function (key) {
         var group = suiteGroups[key], match = /\b(1|2|3|4|5|6|7|8)\b/i.exec(group.name || '');
-        var code = match ? match[1].toUpperCase() : '', label = code ? (code + ' Rack') : group.name;
+        var code = match ? match[1].toUpperCase() : '', label = code ? (' Rack'+ code ) : group.name;
         return {
           id: 'suite-' + group.id, suiteId: group.id, type: 'Feature', title: group.name, state: '?', tags: '', changed: null, assigned: '',
           metrics: {}, suiteFields: {}, bugs: [], children: group.ids.map(build),
