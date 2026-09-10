@@ -270,16 +270,14 @@
       //if (missingConfigs.length) throw new Error('Test Plan suite tree is missing Config suites: ' + missingConfigs.join(', '));
       //var configSuites = ['Rack1', 'Rack2', 'Rack3', 'Rack4', 'Rack5', 'Rack6', 'Rack7', 'Rack8'].map(function (code) { return configMap[code]; });
       var requiredRacks = ['Rack1', 'Rack2', 'Rack3', 'Rack4', 'Rack5', 'Rack6', 'Rack7', 'Rack8'];
-
-     // 只取實際存在於 Test Plan 中的 Rack Suite
-        var configSuites = requiredRacks
+      // 只取實際存在於 Test Plan 中的 Rack Suite
+      var configSuites = requiredRacks
         .filter(function (code) { return !!configMap[code]; })
         .map(function (code) { return configMap[code]; });
 
-    // 只有在連「任何一個 Rack」都找不到時才報錯
-    if (configSuites.length === 0) {
-    throw new Error('Test Plan suite tree is missing Rack suites (Expected Rack1 to Rack8).');
-}
+      只有在連「任何一個 Rack」都找不到時才報錯
+       if (configSuites.length === 0) {
+       throw new Error('Test Plan suite tree is missing Rack suites (Expected Rack1 to Rack8).'); }
       suiteGroups = {};
       function normalizePointOutcome(value) {
         var key = String(value || 'none').replace(/[\s_-]+/g, '').toLowerCase();
