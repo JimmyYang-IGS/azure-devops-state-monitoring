@@ -59,7 +59,7 @@
   if (!isDashboardEntry) return;
   var D = {};
   //D.CFG = {"org":"https://azurecsi.visualstudio.com","orgName":"azurecsi","project":"Dev","queryId":"9254024e-6a97-44ed-953b-1aa07d38fb48","queryUrl":"https://azurecsi.visualstudio.com/Dev/_queries/query/9254024e-6a97-44ed-953b-1aa07d38fb48/","testResultDays":28};
-  D.CFG = {"org":"https://azurecsi.visualstudio.com","orgName":"azurecsi","project":"Building Block","queryId":"3949645","queryUrl":"https://azurecsi.visualstudio.com/Building%20Block/_testPlans/define?planId=3949645&suiteId=3949646","testResultDays":28};
+  D.CFG = {"org":"https://azurecsi.visualstudio.com","orgName":"azurecsi","project":"Building%20Block","queryId":"3949645","queryUrl":"https://azurecsi.visualstudio.com/Building%20Block/_testPlans/define?planId=3949645&suiteId=3949646","testResultDays":28};
   if (extensionContext) {
     D.CFG.org = String(extensionContext.org || D.CFG.org).replace(/\/+$/, '');
     D.CFG.orgName = extensionContext.orgName || D.CFG.orgName;
