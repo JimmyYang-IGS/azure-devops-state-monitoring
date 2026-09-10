@@ -254,10 +254,10 @@
     if (D.CFG.sourceType === 'testPlan') {
       var planPath = base + '/' + encodeURIComponent(D.CFG.project) + '/_apis/testplan/Plans/' + encodeURIComponent(D.CFG.planId);
       var suiteTreeResponse = await D.apiFetch(planPath + '/suites?asTreeView=true&api-version=7.1');
-      var configRank = { Rack1: 1, Rack2: 2, Rack3: 3,Rack4: 4, Rack5: 5, Rack6: 6, Rack7: 7, Rack8: 8 }, configMap = {};
+      var configRank = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8 }, configMap = {};
       function findConfigRoots(suite, insideConfig) {
         if (!suite) return;
-        var match = /\b(Rack1|Rack2|Rack3|Rack4|Rack5|Rack6|Rack7|Rack8)\b/i.exec(suite.name || '');
+        var match = /\b(1|2|3|4|5|6|7|8)\b/i.exec(suite.name || '');
         var isConfigRoot = !!match && !insideConfig;
         if (isConfigRoot) {
           var code = match[1].toUpperCase();
@@ -266,19 +266,10 @@
         (suite.children || []).forEach(function (child) { findConfigRoots(child, insideConfig || isConfigRoot); });
       }
       (suiteTreeResponse.value || []).forEach(function (suite) { findConfigRoots(suite, false); });
-      //var missingConfigs = ['Rack1', 'Rack2', 'Rack3', 'Rack4', 'Rack5', 'Rack6', 'Rack7', 'Rack8'].filter(function (code) { return !configMap[code]; });
-      //if (missingConfigs.length) throw new Error('Test Plan suite tree is missing Config suites: ' + missingConfigs.join(', '));
-      //var configSuites = ['Rack1', 'Rack2', 'Rack3', 'Rack4', 'Rack5', 'Rack6', 'Rack7', 'Rack8'].map(function (code) { return configMap[code]; });
-      var requiredRacks = ['Rack1', 'Rack2', 'Rack3', 'Rack4', 'Rack5', 'Rack6', 'Rack7', 'Rack8'];
-      // 只取實際存在於 Test Plan 中的 Rack Suite
-      var configSuites = requiredRacks
-        .filter(function (code) { return !!configMap[code]; })
-        .map(function (code) { return configMap[code]; });
-
-      //只有在連「任何一個 Rack」都找不到時才報錯
-       if (configSuites.length === 0) {
-       throw new Error('Test Plan suite tree is missing Rack suites (Expected Rack1 to Rack8).'); 
-       }
+      var missingConfigs = ['1', '2', '3', '4', '5', '6', '7', '8'].filter(function (code) { return !configMap[code]; });
+      if (missingConfigs.length) throw new Error('Test Plan suite tree is missing Config suites: ' + missingConfigs.join(', '));
+      var configSuites = ['1', '2', '3', '4', '5', '6', '7', '8'].map(function (code) { return configMap[code]; });
+     
       suiteGroups = {};
       function normalizePointOutcome(value) {
         var key = String(value || 'none').replace(/[\s_-]+/g, '').toLowerCase();
@@ -429,9 +420,9 @@
     }
     var racks;
     if (suiteGroups) {
-      var configOrder = { Rack1: 1, Rack2: 2, Rack3: 3,Rack4: 4, Rack5: 5, Rack6: 6, Rack7: 7, Rack8: 8 };
+      var configOrder = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8 };
       racks = Object.keys(suiteGroups).map(function (key) {
-        var group = suiteGroups[key], match = /\b(Rack1|Rack2|Rack3|Rack4|Rack5|Rack6|Rack7|Rack8)\b/i.exec(group.name || '');
+        var group = suiteGroups[key], match = /\b(1|2|3|4|5|6|7|8)\b/i.exec(group.name || '');
         var code = match ? match[1].toUpperCase() : '', label = code ? (code + ' Config') : group.name;
         return {
           id: 'suite-' + group.id, suiteId: group.id, type: 'Feature', title: group.name, state: '?', tags: '', changed: null, assigned: '',
