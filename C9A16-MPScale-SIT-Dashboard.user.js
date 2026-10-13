@@ -404,7 +404,11 @@
           scriptType: D.fieldValue(f, D.S.metricFields && D.S.metricFields.scriptType),
           crcSdk: D.fieldValue(f, D.S.metricFields && D.S.metricFields.crcSdk),
           igsOwner: D.fieldValue(f, D.S.metricFields && D.S.metricFields.igsOwner),
-          comments: D.fieldValue(f, D.S.metricFields && D.S.metricFields.comments)
+          comments: D.fieldValue(f, D.S.metricFields && D.S.metricFields.comments),
+         // 抓取開始與完成日期
+          startDate: D.fieldValue(f, D.S.metricFields && D.S.metricFields.startDate),
+          completionDate: D.fieldValue(f, D.S.metricFields && D.S.metricFields.completionDate)
+        },
         },
         bugs: (linkedIdsOf[id] || []).filter(function (linkedId) {
           return byId[linkedId] && byId[linkedId]['System.WorkItemType'] === 'Bug';
