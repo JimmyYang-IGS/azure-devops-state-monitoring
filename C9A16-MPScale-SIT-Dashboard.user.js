@@ -80,13 +80,12 @@
     sampleSize: { aliases: ['Sample Size', 'Test Sample Size', 'Sample Count', 'Samples'] },
     numberOfCycles: { fallback: 'Custom.Number_of_cycles', aliases: ['Number_of_cycles', 'Number of cycles', 'Number of Cycles'] },
     testDuration: { aliases: ['Test Duration', 'Estimated Test Duration', 'Duration', 'Test Time'] },
-   // 新增 Estimated Start Date 與 Estimated Completion Date 的對應
-    startDate: { fallback: 'Microsoft.VSTS.Scheduling.StartDate', aliases: ['Start Date', 'Estimated Start Date', 'Start'] },
-    completionDate: { fallback: 'Microsoft.VSTS.Scheduling.TargetDate', aliases: ['Target Date', 'Estimated Completion Date', 'Completion Date', 'Finish Date', 'Due Date'] },
     scriptType: { aliases: ['Script type', 'Script Type'] },
     crcSdk: { aliases: ['CRC SDK', 'CRC SDK Version'] },
     igsOwner: { aliases: ['IGS Owner'] },
-    comments: { aliases: ['Comments', 'Comment'] }
+    comments: { aliases: ['Comments', 'Comment'] },
+    startDate: { aliases: ['Estimated Start Date', 'Start Date', 'EstimatedStartDate'] },
+    completionDate: { aliases: ['Estimated Completion Date', 'Completion Date', 'EstimatedCompletionDate', 'Target Date'] }
   };
   D.S = {racks:[],loadedAt:null,range:"all",chartType:"pie",panels:[],active:0,mode:"live",queries:[],activeQueryKey:'',testResults:{status:"idle",runs:[]},snapshotComparison:null};
   D.el = function (t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
@@ -407,7 +406,11 @@
           scriptType: D.fieldValue(f, D.S.metricFields && D.S.metricFields.scriptType),
           crcSdk: D.fieldValue(f, D.S.metricFields && D.S.metricFields.crcSdk),
           igsOwner: D.fieldValue(f, D.S.metricFields && D.S.metricFields.igsOwner),
-          comments: D.fieldValue(f, D.S.metricFields && D.S.metricFields.comments)
+          comments: D.fieldValue(f, D.S.metricFields && D.S.metricFields.comments),
+         //對應 Execution 中的預估起訖時間欄位
+          startDate: D.fieldValue(f, D.S.metricFields && D.S.metricFields.startDate),
+          completionDate: D.fieldValue(f, D.S.metricFields && D.S.metricFields.completionDate)
+        },
         },
         bugs: (linkedIdsOf[id] || []).filter(function (linkedId) {
           return byId[linkedId] && byId[linkedId]['System.WorkItemType'] === 'Bug';
