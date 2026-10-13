@@ -83,6 +83,8 @@
     scriptType: { aliases: ['Script type', 'Script Type'] },
     crcSdk: { aliases: ['CRC SDK', 'CRC SDK Version'] },
     igsOwner: { aliases: ['IGS Owner'] },
+    startDate: { aliases: ['Estimated Start Date', 'Start Date', 'EstimatedStartDate'] },
+    completionDate: { aliases: ['Estimated Completion Date', 'Completion Date', 'EstimatedCompletionDate', 'Target Date'] }
     comments: { aliases: ['Comments', 'Comment'] }
   };
   D.S = {racks:[],loadedAt:null,range:"all",chartType:"pie",panels:[],active:0,mode:"live",queries:[],activeQueryKey:'',testResults:{status:"idle",runs:[]},snapshotComparison:null};
@@ -408,6 +410,7 @@
          // 抓取開始與完成日期
           startDate: D.fieldValue(f, D.S.metricFields && D.S.metricFields.startDate),
           completionDate: D.fieldValue(f, D.S.metricFields && D.S.metricFields.completionDate)
+        },
         },
         },
         bugs: (linkedIdsOf[id] || []).filter(function (linkedId) {
