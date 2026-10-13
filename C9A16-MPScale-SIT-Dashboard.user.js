@@ -1291,6 +1291,8 @@
       row.appendChild(D.el('td', null, D.displayFieldValue(fields.scriptType)));
       row.appendChild(D.el('td', null, D.displayFieldValue(fields.crcSdk)));
       row.appendChild(D.el('td', 'feature-owner', D.displayFieldValue(fields.igsOwner)));
+      row.appendChild(D.el('td', null, D.fmt(fields.startDate)));
+      row.appendChild(D.el('td', null, D.fmt(fields.completionDate)));
       var bugs = D.el('td', 'feature-bugs');
       if ((testCase.bugs || []).length) (testCase.bugs || []).forEach(function (bug) { bugs.appendChild(D.bugLink(bug)); });
       else bugs.textContent = '-';
