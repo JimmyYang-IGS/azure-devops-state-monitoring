@@ -80,6 +80,9 @@
     sampleSize: { aliases: ['Sample Size', 'Test Sample Size', 'Sample Count', 'Samples'] },
     numberOfCycles: { fallback: 'Custom.Number_of_cycles', aliases: ['Number_of_cycles', 'Number of cycles', 'Number of Cycles'] },
     testDuration: { aliases: ['Test Duration', 'Estimated Test Duration', 'Duration', 'Test Time'] },
+   // 新增 Estimated Start Date 與 Estimated Completion Date 的對應
+    startDate: { fallback: 'Microsoft.VSTS.Scheduling.StartDate', aliases: ['Start Date', 'Estimated Start Date', 'Start'] },
+    completionDate: { fallback: 'Microsoft.VSTS.Scheduling.TargetDate', aliases: ['Target Date', 'Estimated Completion Date', 'Completion Date', 'Finish Date', 'Due Date'] },
     scriptType: { aliases: ['Script type', 'Script Type'] },
     crcSdk: { aliases: ['CRC SDK', 'CRC SDK Version'] },
     igsOwner: { aliases: ['IGS Owner'] },
