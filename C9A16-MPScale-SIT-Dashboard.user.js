@@ -271,14 +271,14 @@
       var missingConfigs = ['1', '2', '3', '4', '5', '6', '7', '8'].filter(function (code) { return !configMap[code]; });
       if (missingConfigs.length) throw new Error('Test Plan suite tree is missing Config suites: ' + missingConfigs.join(', '));
       var configSuites = ['1', '2', '3', '4', '5', '6', '7', '8'].map(function (code) { return configMap[code]; });
-     
+
       suiteGroups = {};
       function normalizePointOutcome(value) {
         var key = String(value || 'none').replace(/[\s_-]+/g, '').toLowerCase();
         if (key === 'passed') return 'Passed';
         if (key === 'failed') return 'Failed';
         if (key === 'none' || key === 'unspecified' || key === 'notexecuted') return 'Not run';
-        if (key === 'inprogress') return 'In Progress';
+        if (key === 'in progress') return 'In Progress';
         return String(value || 'Not run');
       }
       function addTestPoint(point, configSuite) {
@@ -393,8 +393,13 @@
     });
     function build(id) {
       var f = byId[id] || {};
-      return { id: id, type: f['System.WorkItemType'] || '?', title: f['System.Title'] || ('#' + id), state: f['System.State'] || '?',
-        tags: f['System.Tags'] || '', changed: f['System.ChangedDate'] || null,
+      return {
+        id: id,
+        type: f['System.WorkItemType'] || '?',
+        title: f['System.Title'] || ('#' + id),
+        state: f['System.State'] || '?',
+        tags: f['System.Tags'] || '',
+        changed: f['System.ChangedDate'] || null,
         assigned: (f['System.AssignedTo'] && f['System.AssignedTo'].displayName) || '',
         metrics: {
           priority: D.fieldValue(f, D.S.metricFields && D.S.metricFields.priority),
@@ -407,10 +412,8 @@
           crcSdk: D.fieldValue(f, D.S.metricFields && D.S.metricFields.crcSdk),
           igsOwner: D.fieldValue(f, D.S.metricFields && D.S.metricFields.igsOwner),
           comments: D.fieldValue(f, D.S.metricFields && D.S.metricFields.comments),
-         //對應 Execution 中的預估起訖時間欄位
           startDate: D.fieldValue(f, D.S.metricFields && D.S.metricFields.startDate),
           completionDate: D.fieldValue(f, D.S.metricFields && D.S.metricFields.completionDate)
-        },
         },
         bugs: (linkedIdsOf[id] || []).filter(function (linkedId) {
           return byId[linkedId] && byId[linkedId]['System.WorkItemType'] === 'Bug';
@@ -422,7 +425,8 @@
             priority: D.fieldValue(bug, D.S.metricFields && D.S.metricFields.priority)
           };
         }),
-        children: (childrenOf[id] || []).map(build) };
+        children: (childrenOf[id] || []).map(build)
+      };
     }
     var racks;
     if (suiteGroups) {
@@ -955,10 +959,27 @@
     (comparison.stateChanged || []).forEach(function (item) { changeKinds[item.id] = item.beforeState + ' -> ' + item.afterState; });
     var rows = [];
     (D.S.racks || []).forEach(function (rack) { D.collect(rack, 'Test Case').forEach(function (testCase) {
-      var result = testCase.latestResult || {}, metrics = testCase.metrics || {};
-      rows.push({ rack: rack.label, id: testCase.id, title: testCase.title, state: testCase.state, changed: D.fmt(testCase.changed), changedThisWeek: changedIds[testCase.id] ? 'Yes' : 'No', snapshotChange: changeKinds[testCase.id] || '-',
-        result: result.outcome || 'No result', resultDate: D.fmt(result.completedDate), runId: result.runId || '-', priority: D.displayFieldValue(metrics.priority), sampleSize: D.displayFieldValue(metrics.sampleSize), cycles: D.displayFieldValue(metrics.numberOfCycles), duration: D.displayFieldValue(metrics.testDuration),startDate: suiteFields.startDate || '-',completionDate: suiteFields.completionDate || '-',
-        bugs: (testCase.bugs || []).map(function (bug) { return 'BUG #' + bug.id; }).join('; ') || '-', url: D.wiUrl(testCase.id) });
+      var result = testCase.latestResult || {}, metrics = testCase.metrics || {}, suiteFields = testCase.suiteFields || {};
+      rows.push({
+        rack: rack.label,
+        id: testCase.id,
+        title: testCase.title,
+        state: testCase.state,
+        changed: D.fmt(testCase.changed),
+        changedThisWeek: changedIds[testCase.id] ? 'Yes' : 'No',
+        snapshotChange: changeKinds[testCase.id] || '-',
+        result: result.outcome || 'No result',
+        resultDate: D.fmt(result.completedDate),
+        runId: result.runId || '-',
+        priority: D.displayFieldValue(metrics.priority),
+        sampleSize: D.displayFieldValue(metrics.sampleSize),
+        cycles: D.displayFieldValue(metrics.numberOfCycles),
+        duration: D.displayFieldValue(metrics.testDuration),
+        startDate: D.displayFieldValue(suiteFields.startDate),
+        completionDate: D.displayFieldValue(suiteFields.completionDate),
+        bugs: (testCase.bugs || []).map(function (bug) { return 'BUG #' + bug.id; }).join('; ') || '-',
+        url: D.wiUrl(testCase.id)
+      });
     }); }); return rows;
   };
   D.csvValue = function (value) { var text = String(value == null ? '' : value); return /[",\r\n]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text; };
@@ -1067,7 +1088,7 @@
   D.CSS += "\n.tab{font-size:18px;padding:10px 29px;min-height:42px}\n.metric-badge{display:inline-flex;align-items:center;border:1px solid;border-radius:5px;padding:2px 6px;font-size:10.5px;font-weight:700;white-space:nowrap}\n.metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:10px 0 14px}\n.metric-section{min-width:0;padding:10px;border:1px solid #1c2942;border-radius:8px;background:#0f1a2e;overflow-x:auto}\n.metric-section h4{margin:0 0 8px;color:#cfe3ff;font-size:12px}\n.metric-total{font-size:12px;color:#bcd9ff;margin:2px 0 8px;font-weight:700}\n.case-links{display:inline;line-height:1.8}\n@media(max-width:980px){.metric-grid{grid-template-columns:1fr}}\n@media(max-width:720px){.tab{font-size:16px;padding:9px 18px;min-height:40px}}";
   D.CSS += "\n.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}\n.metric-stack{display:grid;gap:12px;align-content:start;min-width:0}\n.metric-section{overflow:hidden}\n.hbar-list{display:grid;gap:10px}\n.hbar-row{padding:9px 10px;border:1px solid #1c2942;border-radius:8px;background:#111d33}\n.hbar-row.total{border-color:#2d527d;background:#12223b}\n.hbar-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}\n.hbar-label{min-width:0;color:#dbeafe;font-size:12px;font-weight:700;overflow-wrap:anywhere}\n.hbar-value{flex:none;color:#a9bdd8;font-size:11px;font-variant-numeric:tabular-nums;text-align:right}\n.hbar-track{height:12px;border-radius:999px;background:#1c2942;overflow:hidden}\n.hbar-fill{height:100%;border-radius:inherit;transition:width .25s ease}\n.hbar-details{margin-top:5px;color:#8fa3c0;font-size:11px}\n.hbar-details>summary{display:flex;align-items:center;min-height:32px;width:max-content;max-width:100%;cursor:pointer;color:#7dd3fc;font-weight:600;list-style:none}\n.hbar-details>summary::-webkit-details-marker{display:none}\n.hbar-details>summary:before{content:'\\25B8';margin-right:5px;color:#5b7ba6;transition:transform .15s}\n.hbar-details[open]>summary:before{transform:rotate(90deg)}\n.hbar-details>summary:hover{color:#bae6fd}\n.hbar-details>summary:focus-visible{outline:2px solid #38bdf8;outline-offset:2px;border-radius:4px}\n.hbar-links{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0 2px 16px}\n@media(max-width:980px){.metric-grid{grid-template-columns:1fr}}\n@media(max-width:720px){.hbar-head{align-items:flex-start;flex-direction:column;gap:3px}.hbar-value{text-align:left}.hbar-row{padding:9px}.hbar-details>summary{min-height:40px}.hbar-links{padding-left:8px}}";
   D.CSS += "\n.bug-detail-scroll{max-width:100%;overflow-x:auto;margin-top:8px}\n.bug-detail-scroll>table{min-width:640px}";
-  D.CSS += "\n.suite-intro{margin:0 0 12px;color:#9fb3d0;font-size:12px}\n.suite-toolbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;width:min(980px,100%);margin-bottom:14px}\n.suite-toolbar>*{width:100%;min-width:0}\n.feature-groups{display:grid;gap:8px}\ndetails.feature-group{min-width:0;border:1px solid #253858;border-radius:9px;background:#0f1a2e;overflow:hidden}\ndetails.feature-group[open]{border-color:#35618f;background:#101d33}\n.feature-summary{display:flex;align-items:center;gap:8px;padding:11px 13px;cursor:pointer;list-style:none}\n.feature-summary::-webkit-details-marker{display:none}\n.feature-summary:before{content:'\\25B8';color:#7dd3fc;transition:transform .15s}\ndetails.feature-group[open]>.feature-summary:before{transform:rotate(90deg)}\n.feature-summary:hover{background:#152744}\n.feature-group-name{color:#e0f2fe;font-size:15px;font-weight:700}\n.suite-pill{display:inline-flex;padding:2px 8px;border-radius:999px;background:#193657;color:#bae6fd;border:1px solid #2d527d;font-size:11px;font-weight:700}\n.feature-group-body{padding:0 12px 12px 28px}\n.feature-table-scroll{max-width:100%;overflow:auto;border:1px solid #1c2942;border-radius:7px}\ntable.feature-table{min-width:1480px;background:#0c1729}\n.feature-table th{position:sticky;top:0;background:#132039;z-index:1}\n.feature-table td{vertical-align:top;line-height:1.4}\n.feature-table .feature-id{width:86px;font-family:Consolas,monospace}\n.feature-table .feature-title{min-width:420px;color:#d7e3f4}\n.feature-table .feature-owner{min-width:150px}\n.feature-table .feature-comments{min-width:240px;max-width:420px;white-space:normal;overflow-wrap:anywhere}\n.feature-case-row{border-left:3px solid transparent}\n.feature-case-row:hover{background:#152341}\n.feature-bugs{min-width:160px}\n.feature-bugs .bug-link{margin:1px 4px 1px 0}\n@media(max-width:720px){.suite-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.suite-toolbar>input{grid-column:1/-1}.feature-group-body{padding-left:10px}.feature-summary{padding:12px 10px}}";
+  D.CSS += "\n.suite-intro{margin:0 0 12px;color:#9fb3d0;font-size:12px}\n.suite-toolbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;width:min(980px,100%);margin-bottom:14px}\n.suite-toolbar>*{width:100%;min-width:0}\n.feature-groups{display:grid;gap:8px}\ndetails.feature-group{min-width:0;border:1px solid #253858;border-radius:9px;background:#0f1a2e;overflow:hidden}\ndetails.feature-group[open]{border-color:#35618f;background:#101d33}\n.feature-summary{display:flex;align-items:center;gap:8px;padding:11px 13px;cursor:pointer;list-style:none}\n.feature-summary::-webkit-details-marker{display:none}\n.feature-summary:before{content:'\\25B8';color:#7dd3fc;transition:transform .15s}\ndetails.feature-group[open]>.feature-summary:before{transform:rotate(90deg)}\n.feature-summary:hover{background:#152744}\n.feature-group-name{color:#e0f2fe;font-size:15px;font-weight:700}\n.suite-pill{display:inline-flex;padding:2px 8px;border-radius:999px;background:#193657;color:#bae6fd;border:1px solid #2d527d;font-size:11px;font-weight:700}\n.feature-group-body{padding:0 12px 12px 28px}\n.feature-table-scroll{max-width:100%;overflow:auto;border:1px solid #1c2942;border-radius:7px}\ntable.feature-table{min-width:1680px;background:#0c1729}\n.feature-table th{position:sticky;top:0;background:#132039;z-index:1}\n.feature-table td{vertical-align:top;line-height:1.4}\n.feature-table .feature-id{width:86px;font-family:Consolas,monospace}\n.feature-table .feature-title{min-width:420px;color:#d7e3f4}\n.feature-table .feature-owner{min-width:150px}\n.feature-table .feature-comments{min-width:240px;max-width:420px;white-space:normal;overflow-wrap:anywhere}\n.feature-case-row{border-left:3px solid transparent}\n.feature-case-row:hover{background:#152341}\n.feature-bugs{min-width:160px}\n.feature-bugs .bug-link{margin:1px 4px 1px 0}\n@media(max-width:720px){.suite-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.suite-toolbar>input{grid-column:1/-1}.feature-group-body{padding-left:10px}.feature-summary{padding:12px 10px}}";
   D.CSS += "\n.dashboard-main{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:start;min-width:0}\n#panels{min-width:0}\n.tabs{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:center;gap:4px;width:64px;min-width:64px;padding:10px 6px 60px 8px}\n.tab{display:flex;align-items:center;justify-content:center;flex:0 0 auto;width:50px;min-width:50px;max-width:50px;min-height:72px;height:auto;padding:8px 5px;border:1px solid #1e2b45;border-radius:6px;background:#111d33;color:#9fb3d0;writing-mode:vertical-rl;text-orientation:mixed;white-space:nowrap;font-size:11px;line-height:1.1}\n.tab.active{background:#16243d;color:#fff;font-weight:600;box-shadow:inset 3px 0 0 #38bdf8}\n.panel{min-width:0;padding:16px 20px 60px 14px}\n@media(max-width:720px){.dashboard-main{grid-template-columns:54px minmax(0,1fr)}.tabs{width:54px;min-width:54px;padding:8px 4px 40px}.tab{width:44px;min-width:44px;max-width:44px;min-height:66px;padding:7px 4px;font-size:10px}.panel{padding:12px 10px 50px 8px}}";
   D.CSS += "\n:root{--dvdash-controls-height:52px}\n.tabs{position:sticky;top:calc(var(--dvdash-controls-height) + 8px);align-self:start;z-index:12;max-height:calc(100vh - var(--dvdash-controls-height) - 16px);overflow-y:auto;scrollbar-width:thin}\n.panel-sticky,.suite-sticky{position:sticky;top:var(--dvdash-controls-height);z-index:11;background:#0b1220;padding-top:8px;padding-bottom:12px;box-shadow:0 12px 18px rgba(3,8,18,.42)}\n.panel-sticky>.cards,.suite-sticky>.cards{margin-bottom:0}\n@media(max-width:980px), (max-height:700px){.panel-sticky,.suite-sticky{position:static;box-shadow:none;padding-top:0}}\n@media(max-width:720px){.tabs{top:calc(var(--dvdash-controls-height) + 6px);max-height:calc(100vh - var(--dvdash-controls-height) - 12px)}}";
   D.CSS += "\n.insights-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 14px}.trend-scroll{max-width:100%;overflow-x:auto}.trend-scroll>svg{min-width:720px}.trend-table-details,.change-group{margin-top:10px;border-top:1px solid #1c2942;padding-top:6px}.trend-table-details>summary,.change-group>summary{cursor:pointer;color:#7dd3fc;font-size:12px;font-weight:600;min-height:32px;display:flex;align-items:center}.table-scroll{max-width:100%;overflow:auto}.table-scroll>table{min-width:760px}.change-list{display:grid;gap:5px;padding:5px 0}.change-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:7px 8px;border:1px solid #1c2942;border-radius:7px;background:#0f1a2e}.change-title{flex:1;min-width:220px;color:#d7e3f4}.change-state{font-size:11px;color:#f8d4a2;font-weight:700}.result-link{white-space:nowrap}@media(max-width:720px){.insights-toolbar>*{width:100%}.trend-scroll>svg{min-width:660px}.change-title{min-width:150px}}";
@@ -1269,7 +1290,7 @@
   D.featureCaseTable = function (entries, featureName) {
     var scroll = D.el('div', 'feature-table-scroll');
     var table = D.el('table', 'feature-table'), thead = D.el('thead'), header = D.el('tr');
-    ['ID', 'Title', 'State', 'Latest Test Result', 'Changed', 'Priority', 'Sample Size', 'Cycles', 'Duration', 'Script type', 'CRC SDK', 'IGS Owner', 'Linked Bugs', 'Comments'].forEach(function (label) { header.appendChild(D.el('th', null, label)); });
+    ['ID', 'Title', 'State', 'Latest Test Result', 'Changed', 'Priority', 'Sample Size', 'Cycles', 'Duration', 'Start Date', 'Completion Date', 'Script type', 'CRC SDK', 'IGS Owner', 'Linked Bugs', 'Comments'].forEach(function (label) { header.appendChild(D.el('th', null, label)); });
     thead.appendChild(header); table.appendChild(thead);
     var tbody = D.el('tbody');
     entries.forEach(function (entry) {
@@ -1290,6 +1311,8 @@
       row.appendChild(D.el('td', null, D.displayFieldValue(metrics.sampleSize)));
       row.appendChild(D.el('td', null, D.displayFieldValue(metrics.numberOfCycles)));
       row.appendChild(D.el('td', null, D.displayFieldValue(metrics.testDuration)));
+      row.appendChild(D.el('td', null, D.displayFieldValue(fields.startDate)));
+      row.appendChild(D.el('td', null, D.displayFieldValue(fields.completionDate)));
       row.appendChild(D.el('td', null, D.displayFieldValue(fields.scriptType)));
       row.appendChild(D.el('td', null, D.displayFieldValue(fields.crcSdk)));
       row.appendChild(D.el('td', 'feature-owner', D.displayFieldValue(fields.igsOwner)));
