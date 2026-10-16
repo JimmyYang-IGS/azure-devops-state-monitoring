@@ -84,8 +84,8 @@
     crcSdk: { aliases: ['CRC SDK', 'CRC SDK Version'] },
     igsOwner: { aliases: ['IGS Owner'] },
     comments: { aliases: ['Comments', 'Comment'] },
-    startDate: { aliases: ['Estimated Start Date', 'Start Date', 'EstimatedStartDate'] },
-    completionDate: { aliases: ['Estimated Completion Date', 'Completion Date', 'EstimatedCompletionDate', 'Target Date'] }
+    startDate: { aliases: ['Actual Start Date', 'Start Date', 'ActualStartDate'] },
+    completionDate: { aliases: ['Actual Completion Date', 'Completion Date', 'ActualCompletionDate', 'Finish Date'] }
   };
   D.S = {racks:[],loadedAt:null,range:"all",chartType:"pie",panels:[],active:0,mode:"live",queries:[],activeQueryKey:'',testResults:{status:"idle",runs:[]},snapshotComparison:null};
   D.el = function (t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
@@ -988,7 +988,7 @@
   };
   D.reportStamp = function () { var now = new Date(); return now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0'); };
   D.exportWeeklyCsv = function () {
-    var headers = [D.groupSingular(), 'Case ID', 'Title', 'Case State', 'Changed Date', 'Changed This Week', 'Snapshot Change', 'Latest Test Result', 'Result Date', 'Test Run ID', 'Priority', 'Sample Size', 'Number of Cycles', 'Test Duration', 'Estimated Start Date', 'Estimated Completion Date', 'Linked Bugs', 'Azure DevOps URL'];
+    var headers = [D.groupSingular(), 'Case ID', 'Title', 'Case State', 'Changed Date', 'Changed This Week', 'Snapshot Change', 'Latest Test Result', 'Result Date', 'Test Run ID', 'Priority', 'Sample Size', 'Number of Cycles', 'Test Duration', 'Actual Start Date', 'Actual Completion Date', 'Linked Bugs', 'Azure DevOps URL'];
     var keys = ['rack', 'id', 'title', 'state', 'changed', 'changedThisWeek', 'snapshotChange', 'result', 'resultDate', 'runId', 'priority', 'sampleSize', 'cycles', 'duration', 'bugs', 'startDate', 'completionDate', 'url'];
     var lines = [headers.map(D.csvValue).join(',')]; D.weeklyRows().forEach(function (row) { lines.push(keys.map(function (key) { return D.csvValue(row[key]); }).join(',')); });
     D.downloadBlob('\ufeff' + lines.join('\r\n'), 'text/csv;charset=utf-8', D.reportPrefix() + '-Weekly-Report-' + D.reportStamp() + '.csv'); D.setStatus('Downloaded weekly CSV report with ' + (lines.length - 1) + ' case rows.', 'info');
